@@ -122,3 +122,28 @@ module.exports.dashboardUserBulkUpdate = (req, res, next) => {
   }
 } 
 
+
+// delete 
+module.exports.dashboardUserDelete = (req, res, next) => {
+  const id = req.params.id 
+  const allJsonData = fs.readFileSync(__dirname + "/../public/data.json", "utf-8");
+  const allParseData = JSON.parse(allJsonData)
+  const exists = allParseData.find(el => el.id=== Number(id)) 
+  if(exists){
+    const loveIdAll = allParseData.filter(el => el.id !== exists.id) 
+    const stringifyUser = JSON.stringify(loveIdAll) 
+  fs.writeFileSync(__dirname + "/../public/data.json", stringifyUser);
+  res.status(200).json({
+    status: 200,
+    messages: 'successfully Deleted data', 
+    success: true,
+    data: exists
+  })
+  }else{
+    res.status(404).json({
+      status: 404,
+      messages: 'Id Not Exists try Another id', 
+      success: false
+    })
+  }
+} 
