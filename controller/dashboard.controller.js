@@ -6,9 +6,18 @@ module.exports.dashboardHome = (req, res, next) => {
 };
 
 /* Form*/
-// module.exports.dashboardUserSaveForm = (req, res, next) => {
-// res.sendFile(path.join(__dirname + "/../views/userSave.html"));
-// };
+module.exports.dashboardUserSaveForm = (req, res, next) => {
+res.sendFile(path.join(__dirname + "/../views/userSave.html"));
+};
+
+module.exports.dashboardRandomUser = (req, res, next) => {
+  const allJsonData = fs.readFileSync(__dirname + "/../public/data.json", "utf-8");
+  const allParseData = JSON.parse(allJsonData)
+  const rnd = allParseData.length 
+  const randomId = Math.floor(Math.random() * rnd)
+  const data = allParseData.find(el => el.id === randomId)
+  res.status(200).send({ status: 200, messages: 'success', random: data})
+}
 
 
 module.exports.dashboardUserAll = (req, res, next) => {
