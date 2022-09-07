@@ -9,12 +9,13 @@ app.get("/", (req, res) => {
   res.send("<h1>Home Route for server</h1>");
 });
 
-app.use(express());
+app.use(express.json())  // req body data --> undefined
+
 
 dbContact();
 
-app.use('/profile', profileRouter);
-app.use('/dashboard', dashboardRoute) 
+app.use("/profile", profileRouter);
+app.use("/dashboard", dashboardRoute);
 
 app.listen(PORT, () => {
   console.log(`server is running http://localhost:${PORT}`);
