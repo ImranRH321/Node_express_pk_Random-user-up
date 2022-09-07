@@ -10,6 +10,23 @@ module.exports.dashboardHome = (req, res, next) => {
 // res.sendFile(path.join(__dirname + "/../views/userSave.html"));
 // };
 
+
+module.exports.dashboardUserAll = (req, res, next) => {
+  const allJsonData = fs.readFileSync(__dirname + "/../public/data.json", "utf-8");
+  const allParseData = JSON.parse(allJsonData)
+  if(allParseData){
+    const {limit} = req.query;
+    const dataAll = allParseData.slice(0, limit) 
+    res.status(200).send({status: 200,  messages: 'success', data: dataAll})
+  }else{
+    res.status(404).json({
+      status: 404,
+      messages: 'Id Not Exists try Another id', 
+      success: false
+  })
+  }
+}
+
 /* user save done*/
 module.exports.dashboardUserSave = (req, res, next) => {
   const { id, name, contact, photoUrl, gender, address } = req.body;
@@ -123,7 +140,7 @@ module.exports.dashboardUserBulkUpdate = (req, res, next) => {
 } 
 
 
-// delete 
+// delete user
 module.exports.dashboardUserDelete = (req, res, next) => {
   const id = req.params.id 
   const allJsonData = fs.readFileSync(__dirname + "/../public/data.json", "utf-8");

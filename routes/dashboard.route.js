@@ -7,6 +7,7 @@ const router = express.Router();
 // router.route('/user/save/form').get(dashboardController.dashboardUserSaveForm)
 
 router.route("/").get(dashboardController.dashboardHome);
+router.route("/user/all").get(dashboardController.dashboardUserAll);
 router.route("/user/save").post(dashboardController.dashboardUserSave);
 router.route("/user/update/:id").patch(dashboardController.dashboardUserUpdate);
 router.route("/user/bulk-update").patch(dashboardController.dashboardUserBulkUpdate);
