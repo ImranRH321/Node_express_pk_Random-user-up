@@ -81,3 +81,44 @@ module.exports.dashboardUserUpdate = (req, res, next) => {
     })
   }
 }
+
+// bulk-update 
+module.exports.dashboardUserBulkUpdate = (req, res, next) => {
+  const userArray = req.body;
+  const allJsonData = fs.readFileSync(__dirname + "/../public/data.json", "utf-8");
+  const allParseData = JSON.parse(allJsonData)
+  
+  if(Array.isArray(userArray)){
+  userArray.map(element => {
+  const filterChecking = allParseData.find(el => el.id=== element.id) 
+  if(filterChecking){
+  filterChecking.id = element.id ?element.id : filterChecking.id 
+  filterChecking.name = element.name ? element.name : filterChecking.name 
+  filterChecking.gender = element.gender ?  element.gender : filterChecking.gender
+  filterChecking.address = element.address ? element.address : filterChecking.address
+  filterChecking.photoUrl = element.photoUrl ?element.address:filterChecking.photoUrl
+  filterChecking.contact = element.address ?element.address :filterChecking.contact  
+ 
+   const loveIdAll = allParseData.filter(el => el.id !== element.id) 
+  const newAddPush = [...loveIdAll, filterChecking]
+    const stringifyUser = JSON.stringify(newAddPush) 
+  fs.writeFileSync(__dirname + "/../public/data.json", stringifyUser);
+  res.status(200).json({
+    status: 200,
+    messages: 'successfully multiple update data', 
+    success: true,
+    data: filterChecking
+  })
+}else{
+  res.status(404).json({
+    status: 404,
+    messages: 'Id Not Exists try Another id', 
+    success: false
+  })
+}
+  });
+  }else{
+    res.status(404).send({success: false, messages: "user require ment array then check"})
+  }
+} 
+
