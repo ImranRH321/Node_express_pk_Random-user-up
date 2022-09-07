@@ -8,5 +8,6 @@ const router = express.Router();
 
 router.route("/").get(dashboardController.dashboardHome);
 router.route("/user/save").post(dashboardController.dashboardUserSave);
+router.route("/user/update/:id").patch(dashboardController.dashboardUserUpdate);
 
 module.exports = router;

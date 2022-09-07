@@ -45,3 +45,39 @@ module.exports.dashboardUserSave = (req, res, next) => {
     });
   }
 };
+
+
+// update user 
+module.exports.dashboardUserUpdate = (req, res, next) => {
+  const id = req.params.id 
+  const userBody = req.body; 
+  const allJsonData = fs.readFileSync(__dirname + "/../public/data.json", "utf-8");
+  const allParseData = JSON.parse(allJsonData)
+  const filterChecking = allParseData.find(el => el.id === parseInt(id)) 
+
+  if(filterChecking !==undefined) {
+    filterChecking.id = userBody.id ?userBody.id : filterChecking.id 
+    filterChecking.name = userBody.name ? userBody.name : filterChecking.name 
+    filterChecking.gender = userBody.gender ?  userBody.gender : filterChecking.gender
+    filterChecking.address = userBody.address ? userBody.address : filterChecking.address
+    filterChecking.photoUrl = userBody.photoUrl ?userBody.address:filterChecking.photoUrl
+    filterChecking.contact = userBody.address ?userBody.address :filterChecking.contact
+    const loveIdAll = allParseData.filter(el => el.id !== parseInt(id)) 
+    const newAddPush = [...loveIdAll, filterChecking]
+    const stringifyUser = JSON.stringify(newAddPush) 
+    fs.writeFileSync(__dirname + "/../public/data.json", stringifyUser);
+
+    res.status(200).json({
+      status: 200,
+      messages: 'successfully updated data', 
+      success: true,
+      data: filterChecking
+    })
+  }else{
+    res.status(404).json({
+      status: 404,
+      messages: 'Id Not Exists try Deference limited id', 
+      success: false
+    })
+  }
+}
